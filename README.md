@@ -1,5 +1,5 @@
     **Stock Market Learning Portal**
-                                                                          
+Hii! My Name is Ritesh Patil and I have developed this project for live stock prediction based on past data of any share and for practice of ML also.                                                                          
 Overview:
 The Stock Market Learning Portal is a comprehensive educational platform aimed at helping users learn about the stock market, from basic concepts to advanced trading strategies. 
 The portal provides an intuitive interface, user profiles, and various resources to help users get started in stock market trading.
@@ -23,8 +23,7 @@ Installation:
 4. SQLite for storing user data (via Flask)
 
 Setup Instructions:
-1. Clone this repository to your local machine:
-  git clone [https://github.com/HARSHALCHAUDHARI/Project.git](https://github.com/HARSHALNCHAUDHARI/Project.git)
+1. Clone this repository to your local machine.
 2. Navigate to the project folder:
   cd stock-market-learning-portal
 3. Install the required Python dependencies:
@@ -97,7 +96,6 @@ Screenshots:
 
 ![image](https://github.com/user-attachments/assets/35061146-8c90-49bf-b77d-1a130bfdfa79)
 
-![image](https://github.com/user-attachments/assets/eb86dc44-199c-4181-a99e-422eaeda0164)
 
 
 
