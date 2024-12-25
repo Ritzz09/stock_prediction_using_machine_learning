@@ -76,12 +76,6 @@ Acknowledgments:
 
 Screenshots: 
 
-![image](https://github.com/user-attachments/assets/35f92cc1-8e61-434b-af74-866e7fa516b7)
-
-![image](https://github.com/user-attachments/assets/9c504886-3c36-433d-8eee-b2c4e35141aa)
-
-![image](https://github.com/user-attachments/assets/190c66fd-f363-4854-9df0-645bd780ffcb)
-
 ![image](https://github.com/user-attachments/assets/9a618c28-d0f9-476e-b05c-75b59d4b2faf)
 
 ![image](https://github.com/user-attachments/assets/6691b911-cdf2-40a0-9288-0191607ec12e)
