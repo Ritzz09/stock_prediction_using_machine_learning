@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comprehensive Stock Market Learning</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #343a40; }
+        
+        /* Header Styling */
+        header { background-color:  #4caf50; color: #fff; padding: 20px 0; text-align: center; }
+        header h1 { font-size: 2.5em; }
+        
+        /* Sidebar Styling */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -250px;
+            width: 250px;
+            height: 100%;
+            background-color: #343a40;
+            color: white;
+            overflow-y: auto;
+            padding-top: 20px;
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+        .sidebar .profile {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .sidebar .profile img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+
+        .sidebar .profile p {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .sidebar .profile-info p {
+            margin: 5px 0;
+            margin-left: 20px;
+            font-size: 0.9em;
+        }
+
+        .sidebar .logout-btn {
+            width: 30%;
+            padding: 10px 10px;
+            border: none;
+            background-color: #4caf50;
+            color: white;
+            font-size: 1em;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 20px;
+            
+        }
+
+        .sidebar .logout-btn:hover {
+            background-color: #45a049;
+        }
+
+
+        .sidebar a {
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 1.2em;
+            color: white;
+            display: block;
+            transition: background 0.3s;
+        }
+
+        .sidebar a:hover {
+            background-color: #495057;
+        }
+
+        .sidebar.active {
+            left: 0;
+        }
+
+        /* Sidebar Toggle Button */
+        .sidebar-toggle {
+            font-size: 1.5em;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            color: #fff;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        /* General Styling */
+        .container { margin-top: 20px; }
+        footer { margin-top: 30px; padding: 10px 0; text-align: center; background-color: #4caf50; color: #666; }
+        .card-header { background-color:  #4caf50; color: #fff; }
+    </style>
+</head>
+<body>
+    
+    <!-- Sidebar Toggle Button -->
+    <div class="sidebar-toggle" onclick="toggleSidebar()">&#9776;</div>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="profile">
+            <i class='far fa-user-circle' style='font-size:36px'alt="Profile Picture"></i>
+            <p id="username">{{ user['username'] if user else 'Guest' }}</p>
+        </div>
+        <div class="profile-info">
+            {% if user %}
+                <p>Email: {{ user['username'] }}@gmail.com</p>
+                <p>Phone: (+91) {{ user['mobile'] }}</p>
+        </br>
+                <a style="margin-left:80px" href="/logout" class="logout-btn">Logout</a>
+            {% else %}
+                <p><a href="/login" class="logout-btn">Login</a></p>
+            {% endif %}
+        </div>
+        
+        
+    </div>
+
+    <header>
+        <h1>Comprehensive Stock Market Learning Portal</h1>
+        <p>Master the fundamentals, strategies, and tools to succeed in the stock market</p>
+    </header>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">StockLearn</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a class="nav-link" href="#introduction">Introduction</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#basics">Basics</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#advanced">Advanced Concepts</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#resources">Resources</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container">
+
+        <!-- Introduction Section -->
+        <section id="introduction" class="my-5">
+            <div class="card">
+                <div class="card-header">Introduction to the Stock Market</div>
+                <div class="card-body">
+                    <p>Stocks represent ownership in a company. When you buy stocks, you become a shareholder, gaining the right to a portion of the company’s profits, typically through dividends, and capital gains when stock prices increase.</p>
+                    <p>Stock markets, such as the New York Stock Exchange (NYSE) and National Stock Exchange (NSE), facilitate the buying and selling of stocks. They act as regulated marketplaces where traders and investors can conduct transactions securely.</p>
+                    <p>The stock market operates through supply and demand principles, where factors like company performance, economic conditions, and investor sentiment influence stock prices.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Basics Section -->
+        <section id="basics" class="my-5">
+            <div class="card">
+                <div class="card-header">Stock Market Basics</div>
+                <div class="card-body">
+                    <h5>Types of Stocks</h5>
+                    <p>Stocks can be categorized as follows:</p>
+                    <ul>
+                        <li><strong>Common Stocks:</strong> These give shareholders voting rights and potential dividends, although dividends aren’t guaranteed.</li>
+                        <li><strong>Preferred Stocks:</strong> These do not offer voting rights but guarantee a fixed dividend.</li>
+                        <li><strong>Growth Stocks:</strong> Companies with high potential for future growth, often reinvesting profits rather than paying dividends.</li>
+                        <li><strong>Dividend Stocks:</strong> Known for paying consistent dividends, these stocks are popular among income-focused investors.</li>
+                    </ul>
+
+                    <h5>Key Market Participants</h5>
+                    <p>The stock market involves several participants:</p>
+                    <ul>
+                        <li><strong>Retail Investors:</strong> Individual investors who buy and sell stocks for personal investment.</li>
+                        <li><strong>Institutional Investors:</strong> Large entities like mutual funds, pension funds, and insurance companies that invest significant amounts in stocks.</li>
+                        <li><strong>Market Makers:</strong> Brokers who provide liquidity by buying and selling stocks to ensure smooth transactions.</li>
+                    </ul>
+
+                    <h5>Order Types</h5>
+                    <p>Understanding the order types is crucial for effective trading:</p>
+                    <ul>
+                        <li><strong>Market Order:</strong> Executes immediately at the current market price.</li>
+                        <li><strong>Limit Order:</strong> Sets a price limit for buying or selling. The order executes only if the market reaches the specified price.</li>
+                        <li><strong>Stop Order:</strong> Activates a buy or sell order once a certain price threshold is reached.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Advanced Concepts Section -->
+        <section id="advanced" class="my-5">
+            <div class="card">
+                <div class="card-header">Advanced Trading Concepts</div>
+                <div class="card-body">
+                    <h5>Technical Analysis</h5>
+                    <p>Technical analysis involves studying past market data to predict future price movements. Some popular tools include:</p>
+                    <ul>
+                        <li><strong>Candlestick Charts:</strong> Visual representations showing opening, closing, high, and low prices for a given period.</li>
+                        <li><strong>Trend Lines:</strong> Lines drawn on charts to highlight trends, used to determine potential breakout or reversal points.</li>
+                        <li><strong>Moving Averages:</strong> Smooths price data over time to identify trends and potential price reversals.</li>
+                    </ul>
+
+                    <h5>Fundamental Analysis</h5>
+                    <p>Fundamental analysis evaluates a company’s financial health. Common metrics include:</p>
+                    <ul>
+                        <li><strong>Price-to-Earnings (P/E) Ratio:</strong> Compares a company’s share price to its earnings per share, indicating valuation.</li>
+                        <li><strong>Return on Equity (ROE):</strong> Measures profitability relative to shareholder equity.</li>
+                        <li><strong>Earnings Per Share (EPS):</strong> Indicates company profitability on a per-share basis.</li>
+                    </ul>
+
+                    <h5>Popular Trading Strategies</h5>
+                    <ul>
+                        <li><strong>Swing Trading:</strong> Captures short- to medium-term gains over a few days or weeks.</li>
+                        <li><strong>Day Trading:</strong> Buys and sells stocks within the same day to profit from small price changes.</li>
+                        <li><strong>Long-Term Investing:</strong> Focuses on holding stocks for years to gain from growth and compounding returns.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Resources Section -->
+        <section id="resources" class="my-5">
+            <div class="card">
+                <div class="card-header">Stock Market Learning Resources</div>
+                <div class="card-body">
+                    <p>Enhance your stock market knowledge with these resources:</p>
+                    <ul>
+                        <li><a href="https://5paisa.com" target="_blank">5paisa Learning Center</a> - Offers guides, courses, and tools for investors of all levels.</li>
+                        <li><a href="https://www.investopedia.com" target="_blank">Investopedia</a> - A comprehensive financial education platform with tutorials, articles, and tools.</li>
+                        <li><a href="https://moneycontrol.com" target="_blank">MoneyControl</a> - A resource for live market updates, news, and research reports.</li>
+                        <li><a href="#">Virtual Trading Simulator</a> - Practice trading risk-free to build confidence and understand market dynamics.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <footer>
+        <p>&copy; 2024 HC Stock Market Learning Portal. All Rights Reserved.</p>
+    </footer>
+
+    <!-- JavaScript for Sidebar Toggle -->
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('active');
+        }
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.9/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

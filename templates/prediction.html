@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Prediction Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #0c0c0c; /* Very dark background */
+            background-image: url('https://source.unsplash.com/1920x1080/?dark,finance');
+            background-size: cover;
+            background-position: center;
+            color: #e0e0e0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            backdrop-filter: blur(10px);
+        }
+        header {
+            background: rgba(34, 34, 51, 0.95);
+            padding: 20px;
+            text-align: center;
+            color: #ffffff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.8);
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+        .container {
+            display: flex;
+            flex: 1;
+            padding: 20px;
+            margin: 20px;
+            border-radius: 8px;
+            background-color: rgba(18, 18, 28, 0.95);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.9);
+        }
+        .sidebar {
+            width: 30%;
+            padding: 20px;
+            margin-right: 20px;
+            border-right: 2px solid #444;
+            
+        }
+        .sidebar h2 {
+            margin-top: 0;
+            font-size: 1.5em;
+            color: #45a049; /* Bright blue */
+        }
+        .sidebar input, .sidebar button {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            border: 1px solid #666;
+            font-size: 1em;
+            background-color: #222;
+            color: #ffffff;
+        }
+        .sidebar button {
+            background-color: #4caf50; /* Bright purple */
+            transition: background-color 0.3s ease;
+        }
+        .sidebar button:hover {
+            background-color: #4338ca; /* Darker purple */
+        }
+        .content {
+            width: 70%;
+            display: flex;
+            flex-direction: column;
+        }
+        .content h2 {
+            margin: 20px 0 10px;
+            color: #45a049; /* Bright blue */
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 500px; /* Increased height for charts */
+            margin-bottom: 30px;
+            background-color: #1a1a1a; /* Darker chart background */
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.8);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            background-color: #222; /* Dark table background */
+            color: #ffffff;
+        }
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #444;
+        }
+        th {
+            background-color: #333;
+            font-weight: bold;
+        }
+        footer {
+            background: rgba(34, 34, 51, 0.95);
+            padding: 20px;
+            text-align: center;
+            color: #ffffff;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.8);
+        }
+        footer p {
+            margin: 0;
+        }
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                margin-right: 0;
+                border-right: none;
+                border-bottom: 2px solid #444;
+            }
+            .content {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Stock Prediction Dashboard</h1>
+    </header>
+    
+    <div class="container">
+        <aside class="sidebar">
+            <h2>Enter Stock Details</h2>
+            <form id="stockForm">
+                <input type="text" id="ticker" placeholder="AAPL" required>
+                <input type="date" id="startDate" required>
+                <input type="date" id="endDate" required>
+                <button type="submit">Submit</button>
+            </form>
+        </aside>
+
+        <main class="content">
+            <h2>Data Overview</h2>
+            <div id="dataTable"></div>
+            <h2>Charts</h2>
+            <div class="chart-container">
+                <canvas id="openChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <canvas id="closeChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <canvas id="predictionChart"></canvas>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Stock Prediction Dashboard. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.getElementById('stockForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const ticker = document.getElementById('ticker').value;
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+
+            const dataTable = document.getElementById('dataTable');
+            dataTable.innerHTML = '<p>Loading...</p>';
+
+            fetch('/fetch-data', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ ticker, start_date: startDate, end_date: endDate })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                dataTable.innerHTML = '';
+                if (data.error) {
+                    dataTable.innerHTML = `<p>${data.error}</p>`;
+                    return;
+                }
+
+                const table = document.createElement('table');
+                const headers = ['Metric', 'Open', 'High', 'Low', 'Close', 'Adj Close', 'Volume'];
+                const headerRow = document.createElement('tr');
+                headers.forEach(header => {
+                    const th = document.createElement('th');
+                    th.textContent = header;
+                    headerRow.appendChild(th);
+                });
+                table.appendChild(headerRow);
+                
+                const metrics = ['count', 'mean', 'std', 'min', '25%', '50%', '75%', 'max'];
+                metrics.forEach(metric => {
+                    const row = document.createElement('tr');
+                    const metricCell = document.createElement('td');
+                    metricCell.textContent = metric;
+                    row.appendChild(metricCell);
+                    
+                    headers.slice(1).forEach(column => {
+                        const cell = document.createElement('td');
+                        cell.textContent = data.statistics[column][metric];
+                        row.appendChild(cell);
+                    });
+                    table.appendChild(row);
+                });
+                dataTable.appendChild(table);
+
+                const labels = data.data.map(row => row.Date);
+                const openPrices = data.data.map(row => row.Open);
+                const closePrices = data.data.map(row => row.Close);
+                const actual = data.actual;
+                const predictions = data.predictions;
+
+                new Chart(document.getElementById('openChart'), {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{ label: 'Open Price', data: openPrices, borderColor: '#3b82f6', fill: true }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: { title: { display: true, text: 'Date' }, grid: { color: '#444' } },
+                            y: { title: { display: true, text: 'Price' }, beginAtZero: false, grid: { color: '#444' } }
+                        }
+                    }
+                });
+
+                new Chart(document.getElementById('closeChart'), {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{ label: 'Close Price', data: closePrices, borderColor: '#34d399', fill: true }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: { title: { display: true, text: 'Date' }, grid: { color: '#444' } },
+                            y: { title: { display: true, text: 'Price' }, beginAtZero: false, grid: { color: '#444' } }
+                        }
+                    }
+                });
+
+                new Chart(document.getElementById('predictionChart'), {
+                    type: 'line',
+                    data: {
+                        labels: labels.slice(-predictions.length),
+                        datasets: [
+                            { label: 'Actual Price', data: actual.slice(-predictions.length), borderColor: '#ef4444', fill: true },
+                            { label: 'Predicted Price', data: predictions, borderColor: '#fbbf24', fill: true }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: { title: { display: true, text: 'Date' }, grid: { color: '#444' } },
+                            y: { title: { display: true, text: 'Price' }, beginAtZero: false, grid: { color: '#444' } }
+                        }
+                    }
+                });
+            })
+            .catch(error => {
+                dataTable.innerHTML = `<p>Error fetching data: ${error.message}</p>`;
+            });
+        });
+    </script>
+</body>
+</html>

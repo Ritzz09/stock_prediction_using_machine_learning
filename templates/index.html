@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Trading Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* General Styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: url('https://images.unsplash.com/photo-1556740749-887f6717d7e4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDF8fHRyYWRpbmd8ZW58MHx8fHwxNjQxNzIwNTU3&ixlib=rb-1.2.1&q=80&w=1080') no-repeat center center fixed;
+            background-size: cover;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        header {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            animation: fadeIn 1s ease-in-out;
+        }
+        header .login-btn {
+            width: 100%;
+            padding: 10px 10px;
+            border: none;
+            background-color: #4caf50;
+            color: white;
+            font-size: 1em;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 20px;
+        }
+
+        nav a {
+            color: #4caf50;
+            margin: 0 15px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #88d1b8;
+        }
+
+        /* Sidebar Styling */
+        .sidebar {
+            position: fixed;
+            left: -250px;
+            top: 0;
+            width: 250px;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            color: #fff;
+            padding: 20px;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.5);
+            transition: left 0.3s ease;
+            z-index: 1000;
+            
+        }
+
+        .sidebar.active {
+            left: 0;
+        }
+
+        .sidebar .profile {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .sidebar .profile img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+
+        .sidebar .profile p {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .sidebar .profile-info p {
+            margin: 5px 0;
+            font-size: 0.9em;
+        }
+
+        .sidebar .logout-btn {
+            width: 100%;
+            padding: 10px 10px;
+            border: none;
+            background-color: #4caf50;
+            color: white;
+            font-size: 1em;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 20px;   
+            
+        }
+
+        .sidebar .logout-btn:hover {
+            background-color: #45a049;
+        }
+
+        /* Content and Welcome Box */
+        .welcome-box {
+            background: rgba(0, 0, 0, 0.8);
+            margin: 50px auto;
+            padding: 40px;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .welcome-box h2 {
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+
+        .button-container {
+            margin: 20px 0;
+        }
+
+        .button-container button {
+            background-color: #4caf50;
+            border: none;
+            color: white;
+            padding: 15px 30px;
+            font-size: 1em;
+            border-radius: 30px;
+            cursor: pointer;
+            margin: 0 10px;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .button-container button:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
+        }
+
+        /* Toggle Button for Sidebar */
+        .sidebar-toggle {
+            position: fixed;
+            left: 20px;
+            top: 20px;
+            font-size: 1.5em;
+            cursor: pointer;
+            z-index: 1001;
+            color: #4caf50;
+        }
+
+        /* Footer Styling */
+        footer {
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: auto;
+            width: 100%;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar Toggle Button -->
+    <i class="fas fa-bars sidebar-toggle" onclick="toggleSidebar()"></i>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="profile">
+            <i class='far fa-user-circle' style='font-size:36px'alt="Profile Picture"></i>
+            <p id="username">{{ user['username'] if user else 'Guest' }}</p>
+        </div>
+        <div class="profile-info">
+            {% if user %}
+                <p>Email: {{ user['username'] }}@gmail.com</p>
+                <p>Phone: (+91) {{ user['mobile'] }}</p>
+        </br>
+                <a style="margin-left:80px" href="/logout" class="logout-btn">Logout</a>
+            {% else %}
+                <p><a href="/login" class="logout-btn">Login</a></p>
+            {% endif %}
+        </div>
+    </div>
+
+    <header>
+        <h1>Stock Trading Dashboard</h1>
+        <p><a style="margin-left:1200px;"href="/login" class="login-btn">Login</a></p>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/prediction">Predictions</a>
+            <a href="/learning">Learning</a>
+            <a href="#about">About</a>
+            <a href="#contact">Contact</a>
+            
+        </nav>
+    </header>
+
+    <div class="welcome-box">
+        {% if user %}
+            <h2>Welcome back, {{ user['username'] }}!</h2>
+            <p>Your gateway to smart trading insights and predictions.</p>
+        {% else %}
+            <h2>Welcome to MyStockPredictor!</h2>
+            <p>Your gateway to smart trading insights and predictions.</p>
+        {% endif %}
+        <div class="button-container">
+            <button onclick="location.href='/prediction'">Go to Prediction</button>
+            <button onclick="location.href='/learning'">Go to Learning</button>
+        </div>
+        <p>Explore market trends, stock details, and make informed trading decisions!</p>
+    </div>
+
+    <footer>
+        <p>&copy; Ritz Prediction App. All rights reserved.</p>
+        <p>Contact: riteshlkh2018@gmail.com | Phone: (+91) 9175830994</p>
+    </footer>
+
+    <!-- JavaScript for Sidebar Toggle -->
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>
