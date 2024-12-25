@@ -75,6 +75,7 @@ Acknowledgments:
   * Flask: For simplifying the development of the backend.
 
 Screenshots: 
+![WhatsApp Image 2024-12-25 at 12 20 28](https://github.com/user-attachments/assets/f46a5554-c407-42b4-87b6-8a885438eb01)
 
 ![image](https://github.com/user-attachments/assets/9a618c28-d0f9-476e-b05c-75b59d4b2faf)
 
